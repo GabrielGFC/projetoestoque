@@ -1,0 +1,23 @@
+.mudarSenhaCodigoSection{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 0 0 10px 0;
+} 
+.mudarSenhaCodigoSection h3, .mudarSenhaCodigoSection input{
+    width: 100%;
+    text-align: center;
+}
+.mudarSenhaCodigoSection h3{
+    font-size: 15px;
+    font-weight: 400;
+}
+.mudarSenhaCodigoSection input{
+    background-color: #E6E6E6;
+    border: none;
+    border-radius: 20px;
+    height: 40px;
+    margin: 30px 0 0 0;
+    padding: 5px 20px;
+    text-align: left;
+}
