@@ -92,6 +92,7 @@ function Colaborador() {
         <div className="colaboradorHistoricoDiv" style={{ display: activePage === 'historico' ? 'flex' : 'none' }}>
           <ColaboradorHistorico />
         </div>
+      
       </div>
     </>
   )
