@@ -174,13 +174,13 @@ function AdministradorEditColaborador() {
                     <h3>Adicionar Colaborador</h3>
                     <form>
                         <label htmlFor="matricula">Matrícula:</label>
-                        <input type="text" id="matricula" name="matricula" defaultValue={colaboradorData.matricula} />
+                        <input type="number" id="matricula" name="matricula" defaultValue={colaboradorData.matricula} />
 
                         <label htmlFor="nome">Nome:</label>
                         <input type="text" id="nome" name="nome" defaultValue={colaboradorData.nome} />
 
                         <label htmlFor="email">E-mail:</label>
-                        <input type="text" id="email" name="email" defaultValue={colaboradorData.email} />
+                        <input type="email" id="email" name="email" defaultValue={colaboradorData.email} />
 
                         <label htmlFor="senha">Senha:</label>
                         <div className="passwordInputContainerAddNewColaborador">
@@ -196,7 +196,7 @@ function AdministradorEditColaborador() {
                                 onClick={togglePasswordVisibility}
                             />
                         </div>
-                        <button type="submit">Salvar</button>
+                        <button type="submit" className='buttonsEditFamilias'>Salvar</button>
                     </form>
                 </div>
             </div>

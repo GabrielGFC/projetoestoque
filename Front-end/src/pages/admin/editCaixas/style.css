@@ -96,3 +96,14 @@
 .newColaborador span{
     margin: 0 0 0 10px;
 }
+.buttonsEditFamilias{
+    border: none;
+    margin: 50px auto 0;
+    width: 30%;
+    color: white;
+    border-radius: 10px;
+    padding: 5px 70px;
+    font-size: 14px ;
+    font-weight: 500;
+    background-color: #009521;
+}

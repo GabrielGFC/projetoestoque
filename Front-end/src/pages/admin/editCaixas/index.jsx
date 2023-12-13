@@ -10,15 +10,15 @@ function AdministradorEditCaixas() {
     // Estado para armazenar os dados do item selecionado para edição
     const [colaboradorData, setColaboradorData] = useState({
         familia: '',
-        maxPecas: 0,
-        minPecas: 0
+        maxPecas: '',
+        minPecas: ''
     });
     // Estado para controlar o termo de pesquisa digitado
     const [searchTerm, setSearchTerm] = useState('');
 
     // Função para abrir o pop-up de criação
     const openCreatePopup = () => {
-        setColaboradorData({ familia: '', maxPecas: 0, minPecas: 0 });
+        setColaboradorData({ familia: '', maxPecas: '', minPecas: '' });
         setShowCreatePopup(true);
         setShowPopup(false);
     };
@@ -106,7 +106,10 @@ function AdministradorEditCaixas() {
                         <input type="text" id="familia" name="familia" defaultValue={colaboradorData.familia} />
 
                         <label htmlFor="maxPecas">Máximo de peças:</label>
-                        <input type="text" id="maxPecas" name="maxPecas" defaultValue={colaboradorData.maxPecas} />
+                        <input type="number" id="maxPecas" name="maxPecas" defaultValue={colaboradorData.maxPecas} />
+
+                        <label htmlFor="minPecas">Mínimo de peças:</label>
+                        <input type="number" id="minPecas" name="minPecas" defaultValue={colaboradorData.minPecas} />
                     </form>
                     <div className="buttonsEditColaborador">
                         <button type="submit">Deletar</button>
@@ -125,8 +128,10 @@ function AdministradorEditCaixas() {
                         <input type="text" id="familia" name="familia" defaultValue={colaboradorData.familia} />
                         < label htmlFor="maxPecas">Máximo de peças:</label>
                         <input type="text" id="maxPecas" name="maxPecas" value={colaboradorData.maxPecas} onChange={(e) => setColaboradorData({ ...colaboradorData, maxPecas: e.target.value })} />
+                        < label htmlFor="minPecas">Mínimo de peças:</label>
+                        <input type="text" id="minPecas" name="minPecas" value={colaboradorData.minPecas} onChange={(e) => setColaboradorData({ ...colaboradorData, minPecas: e.target.value })} />
 
-                        <button type="submit">Salvar</button>
+                        <button type="submit" className='buttonsEditFamilias'>Salvar</button>
                     </form>
                 </div>
             </div>
