@@ -9,6 +9,10 @@ import clockIcon from "../../assets/clock.svg";
 import odontoLogo from "../../assets/logo.svg";
 import exitIcon from "../../assets/exit.svg";
 import addIcon from "../../assets/add.svg";
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
+import { useNavigate } from "react-router-dom";
+
 
 function Colaborador() {
   const [activePage, setActivePage] = useState('entrada');
@@ -17,6 +21,35 @@ function Colaborador() {
     setActivePage(page);
   };
 
+  //Tooltip Id's
+  const tooltipSair = (
+    <Tooltip id="tooltip">
+      <strong>Sair</strong>
+    </Tooltip>
+  );
+  const tooltipHistorico = (
+    <Tooltip id="tooltip">
+      <strong>Histórico</strong>
+    </Tooltip>
+  );
+  const tooltipSaida = (
+    <Tooltip id="tooltip"> 
+      <strong>Saída</strong>
+    </Tooltip>
+  );
+  const tooltipEntrada = (
+    <Tooltip id="tooltip"> 
+      <strong>Entrada</strong>
+    </Tooltip>
+  );
+  //sair 
+  const navigate = useNavigate();
+  const deslog = () => { // ... lógica para fazer logout e limpar a matrícula do armazenamento local ...
+    localStorage.removeItem('matricula');
+    localStorage.removeItem('usuario');
+    navigate("/login");
+    
+  };
   return (
     <>
       <header className="headerTop">
@@ -27,16 +60,24 @@ function Colaborador() {
         <div className="headerRightColaborador">
           <ul>
             <li data-title="Entrada" onClick={() => changePage('entrada')}>
-              <img src={addIcon} alt="Entrada logo" />
+              <OverlayTrigger placement="bottom" overlay={tooltipEntrada}>
+                <img src={addIcon} alt="Entrada logo" />
+              </OverlayTrigger>
             </li>
             <li data-title="Saída" onClick={() => changePage('saida')}>
-              <img src={removeIcon} alt="Saída logo" />
+              <OverlayTrigger placement="bottom" overlay={tooltipSaida}>
+                <img src={removeIcon} alt="Saída logo" />
+              </OverlayTrigger>
             </li>
             <li data-title="Histórico" onClick={() => changePage('historico')}>
-              <img src={clockIcon} alt="Histórico logo" />
+              <OverlayTrigger placement="bottom" overlay={tooltipHistorico}>
+                <img src={clockIcon} alt="Histórico logo" />
+              </OverlayTrigger>
             </li>
             <li data-title="Sair">
-              <Link to="/login"><img src={exitIcon} alt="Sair logo" /></Link>
+              <OverlayTrigger placement="bottom" overlay={tooltipSair}>
+                <button onClick={deslog} className='deslogButton'><img src={exitIcon} alt="Sair logo" /></button>
+              </OverlayTrigger>
             </li>
           </ul>
         </div>

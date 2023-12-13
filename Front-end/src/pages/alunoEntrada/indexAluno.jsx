@@ -4,6 +4,11 @@ import odontoLogo from "../alunoEntrada/../../assets/logo.svg";
 import exitIcon from "../alunoEntrada/../../assets/exit.svg";
 import addIcon from "../alunoEntrada/../../assets/add.svg";
 import { Link} from "react-router-dom";
+import Toast from 'react-bootstrap/Toast';
+import { useNavigate } from "react-router-dom";
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
+
 
 
 function AlunoEntrada() {
@@ -93,7 +98,7 @@ function AlunoEntrada() {
     changeStatus(true);
     setAlertStyle({ display: "none" });
   };
-  
+  const navigate = useNavigate();
   const sendRequestoToColaboratorButton = () => { // ... lógica para enviar a solicitação para o colaborador ...
     const finalDataMovement = [
       {
@@ -103,6 +108,11 @@ function AlunoEntrada() {
     ];
     console.log(finalDataMovement);
     buttonItemRemoved()
+    setShow(true)
+    setTimeout(() => {
+      navigate("/login");
+      localStorage.removeItem('usuario');
+    }, 6000);
   }
 
 
@@ -118,10 +128,18 @@ function AlunoEntrada() {
   
   const handleLogout = () => { // ... lógica para fazer logout e limpar a matrícula do armazenamento local ...
     localStorage.removeItem('matricula');
+    localStorage.removeItem('usuario');
     console.log(localStorage)
     console.log(finalDataMovement);
   };
+  const [show, setShow] = useState(false);
 
+  //Tooltip Id's
+  const tooltipSair = (
+    <Tooltip id="tooltip">
+      <strong>Sair</strong>
+    </Tooltip>
+  );
   return (
     <>
      {/* ... estrutura do cabeçalho ... */}
@@ -132,13 +150,18 @@ function AlunoEntrada() {
         </div>
         <div className="headerRightAluno">
           <ul>
-            <li data-title="Sair">
-              <Link to="/login" onClick={handleLogout}><img src={exitIcon} alt="Exit logo" /></Link>
-            </li>
+              <li data-title="Sair">
+                <OverlayTrigger placement="bottom" overlay={tooltipSair}>
+                  <Link to="/login" onClick={handleLogout}><img src={exitIcon} alt="Exit logo" /></Link>
+                </OverlayTrigger>
+              </li>
           </ul>
         </div>
       </header>
       <div className="body">
+          <Toast onClose={() => setShow(false)} show={show} delay={6000} autohide>
+            <Toast.Body>Pedido enviado com sucesso !<br/>Você será desconectado.</Toast.Body>
+          </Toast>
         <div className="contentTop">
           {/* ... estrutura do conteúdo principal ... */}
           <img src={addIcon} className="addIcon" alt="Add icon" />
@@ -191,7 +214,7 @@ function AlunoEntrada() {
           </div>
           <div className="contentBottom" style={buttonsList}>
             <button onClick={buttonItemRemoved}>Cancelar</button>
-            <Link to="../login" onClick={sendRequestoToColaboratorButton}  className="buttonSendToColaborator"><button>Confirmar</button></Link>
+            <button onClick={sendRequestoToColaboratorButton}  className="buttonSendToColaborator">Confirmar</button>
           </div>
         </div>
       </div>

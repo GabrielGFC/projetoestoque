@@ -22,35 +22,36 @@ function Login() {
   const handleSenhaChange = (e) => {
     setSenha(e.target.value);
   };
-
+  
   const validarLogin = () => {
     const usuariosAluno = [
-      { matricula: '123', senha: 'senha123' },
+      { matricula: '1234', senha: 'use1' },
     ]
     const usuariosColaborador = [
-        {matricula: '1234', senha: 'senha1234'}
+        {matricula: '2345', senha: 'use2'}
     ];
     const usuariosAdmin = [
-      {matricula: '12345', senha: 'senha12345'}
+      {matricula: '3456', senha: 'use3'}
   ];
-
     const usuarioEncontradoAluno = usuariosAluno.find(user => user.matricula === matricula && user.senha === senha);
     const usuarioEncontradoColaborador = usuariosColaborador.find(user => user.matricula === matricula && user.senha === senha);
     const usuarioEncontradoAdmin = usuariosAdmin.find(user => user.matricula === matricula && user.senha === senha);
 
     if (usuarioEncontradoAluno) {
         localStorage.setItem('matricula', matricula);
+        localStorage.setItem('usuario', "aluno");
         navigateTo('/aluno');
         console.log(matricula);
       } else if (usuarioEncontradoColaborador) {
         navigateTo('/colaborador');
+        localStorage.setItem('usuario', "colaborador");
       } else if (usuarioEncontradoAdmin) {
+        localStorage.setItem('usuario', "admin");
         navigateTo('/admin');
       }else {
         setLoginError(true);
       }
     };
-
   return (
     <>
       <div className="bodyContainer">
@@ -67,12 +68,12 @@ function Login() {
               <h2>Login</h2>
               <div className="loginCardCenterMatricula">
                 <h3>Usuário</h3>
-                <input value={matricula} onChange={handleMatriculaChange} placeholder="Digite sua matrícula"/>
+                <input value={matricula} type="number"  onChange={handleMatriculaChange} placeholder="Digite sua matrícula"/>
               </div>
               <div className="loginCardCenterSenha">
                 <h3>Senha</h3>
                 <div className='divPassword'>
-                  <input id="password" type={isPasswordVisible ? 'text' : 'password'} placeholder="Digite sua senha" value={senha} onChange={handleSenhaChange} />
+                  <input maxLength="4" id="password" type={isPasswordVisible ? 'text' : 'password'} placeholder="Digite sua senha" value={senha} onChange={handleSenhaChange} />
                   <span className="lnr lnr-eye" onClick={togglePasswordVisibility} />
                 </div>
               </div>

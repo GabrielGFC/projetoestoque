@@ -59,11 +59,11 @@
     font-size: 14px ;
     font-weight: 500;
 }
-.contentBottom button{
+.contentBottom button:nth-child(1){
     background-color: #F20000;
     margin-right: 30px;
 }
-.buttonSendToColaborator button{
+.buttonSendToColaborator{
     background-color: #009521;
 }
 .reportTable{
@@ -97,59 +97,29 @@
     font-weight: 400;
     margin: 0 10px;
 }
-/*TOOLTIP*/
-/* setup tooltips */
-.tooltip {
-    position: relative;
-  }
-  .tooltip:before,
-  .tooltip:after {
-    display: block;
-    opacity: 0;
-    pointer-events: none;
-    position: absolute;
-  }
-  .tooltip:after {
-    border-right: 6px solid transparent;
-    border-bottom: 6px solid rgba(39,99,117,.85);; 
-    border-left: 6px solid transparent;
-    content: '';
-    height: 0;
-    top: 40px;
-    left: 11px;
-    width: 0;
-  }
-  .tooltip:before {
-    text-align: center;
-    background: rgba(39,99,117,.85);
-    border-radius: 5px;
-    color: #fff;
-    content: attr(data-title);
-    font-size: 15px;
-    padding: 6px 15px;
-    left: -10px;
-    top: 45px;
-    white-space: nowrap;
-    font-weight: 600;
-  }
-  
-  /* the animations */
-  /* fade */
-  .tooltip.fade:after,
-  .tooltip.fade:before {
-    transform: translate3d(0,-10px,0);
-    transition: all .15s ease-in-out;
-  }
-  .tooltip.fade:hover:after,
-  .tooltip.fade:hover:before {
-    opacity: 1;
-    transform: translate3d(0,0,0);
-  }
 /*ALERTA*/
 .alertAdd{
     margin: 10px 0;
     font-size: 15px;
     color: rgb(192, 21, 21);
     font-weight: 600;
+    text-align: center;
+}
+/*notificação*/
+.toast{
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    background-color: #27752fb9;
+    display: flex;
+    flex-direction: column;
+    width: 350px;
+    padding: 10px;
+    border-radius: 20px;
+    color: white;
+    font-size: 20px;
+    font-weight: 500;
+}
+.toast-body{
     text-align: center;
 }

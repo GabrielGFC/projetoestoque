@@ -10,14 +10,15 @@ function AdministradorEditCaixas() {
     // Estado para armazenar os dados do item selecionado para edição
     const [colaboradorData, setColaboradorData] = useState({
         familia: '',
-        maxPecas: 0
+        maxPecas: 0,
+        minPecas: 0
     });
     // Estado para controlar o termo de pesquisa digitado
     const [searchTerm, setSearchTerm] = useState('');
 
     // Função para abrir o pop-up de criação
     const openCreatePopup = () => {
-        setColaboradorData({ familia: '', maxPecas: 0 });
+        setColaboradorData({ familia: '', maxPecas: 0, minPecas: 0 });
         setShowCreatePopup(true);
         setShowPopup(false);
     };
@@ -37,9 +38,9 @@ function AdministradorEditCaixas() {
 
     // Dados das caixas recebidos
     const dataRecivedCaixas = [
-        { familia: 'Cirúrgica', maxPecas: 20 },
-        { familia: 'Dentística', maxPecas: 17 },
-        { familia: 'Moldeira de prótese', maxPecas: 10 }
+        { familia: 'Cirúrgica', maxPecas: 20, minPecas: 2 },
+        { familia: 'Dentística', maxPecas: 17, minPecas: 10 },
+        { familia: 'Moldeira de prótese', maxPecas: 10, minPecas: 1 }
     ];
 
     // Filtrar caixas com base no termo de pesquisa
@@ -72,6 +73,7 @@ function AdministradorEditCaixas() {
                                 <tr>
                                     <th scope="col">Família</th>
                                     <th scope="col">Máximo de peças</th>
+                                    <th scope="col">Mínimo de peças</th>
                                     <th scope="col">Edit</th>
                                 </tr>
                             </thead>
@@ -80,6 +82,7 @@ function AdministradorEditCaixas() {
                                     <tr key={index}>
                                         <th scope="row">{caixa.familia}</th>
                                         <td>{caixa.maxPecas}</td>
+                                        <td>{caixa.minPecas}</td>
                                         <td>
                                             <button className="editColaboradorButton" onClick={() => openEditPopup(caixa)}>
                                                 <span className="lnr lnr-pencil" />
@@ -104,9 +107,11 @@ function AdministradorEditCaixas() {
 
                         <label htmlFor="maxPecas">Máximo de peças:</label>
                         <input type="text" id="maxPecas" name="maxPecas" defaultValue={colaboradorData.maxPecas} />
-                        
-                        <button type="submit">Salvar</button>
                     </form>
+                    <div className="buttonsEditColaborador">
+                        <button type="submit">Deletar</button>
+                        <button type="submit">Salvar</button>
+                    </div>
                 </div>
             </div>
             <div className="popupContainer" style={{ display: showCreatePopup ? 'block' : 'none' }}>

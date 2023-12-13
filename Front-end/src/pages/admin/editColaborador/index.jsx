@@ -159,8 +159,11 @@ function AdministradorEditColaborador() {
                                 onClick={togglePasswordVisibility}
                             />
                         </div>
-                        <button type="submit">Salvar</button>
                     </form>
+                    <div className="buttonsEditColaborador">
+                        <button type="submit">Deletar</button>
+                        <button type="submit">Salvar</button>
+                    </div>
                 </div>
             </div>
             <div className="popupContainer" style={{ display: showCreatePopup ? 'block' : 'none' }}>

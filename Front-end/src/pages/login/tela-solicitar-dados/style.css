@@ -91,3 +91,11 @@
     padding: 0 40px;
     height: 20%;
 }
+.matriculaError{
+    bottom: 60px;
+    margin: 10px 0 0 0;
+    text-align: center;
+    width: 100%;
+    color: red;
+    font-size: 15px;
+}

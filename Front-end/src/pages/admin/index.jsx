@@ -10,6 +10,9 @@ import colaboradoresIcon from "../../assets/colaboradores.svg";
 import clockIcon from "../../assets/clock.svg";
 import odontoLogo from "../../assets/logo.svg";
 import exitIcon from "../../assets/exit.svg";
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
+import { useNavigate } from "react-router-dom";
 
 function Admin() {
     const [changePagesAdministradorEditColaborador, setAdministradorEditColaboradorStyle] = useState({ display: "flex" });
@@ -30,6 +33,35 @@ function Admin() {
         setAdministradorEditCaixasStyle({ display: "none" });
         setAdministradorHistoricoStyle({ display: "flex" });
     }
+    //Tooltip Id's
+  const tooltipSair = (
+    <Tooltip id="tooltip">
+      <strong>Sair</strong>
+    </Tooltip>
+  );
+  const tooltipHistorico = (
+    <Tooltip id="tooltip">
+      <strong>Histórico</strong>
+    </Tooltip>
+  );
+  const tooltipCaixas = (
+    <Tooltip id="tooltip"> 
+      <strong>Saída</strong>
+    </Tooltip>
+  );
+  const tooltipColaborador = (
+    <Tooltip id="tooltip"> 
+      <strong>Entrada</strong>
+    </Tooltip>
+  );
+  //sair 
+  const navigate = useNavigate();
+  const deslog = () => { // ... lógica para fazer logout e limpar a matrícula do armazenamento local ...
+    localStorage.removeItem('matricula');
+    localStorage.removeItem('usuario');
+    navigate("/login");
+    
+  };
   return (
     <>
         <header className="headerTop">
@@ -40,16 +72,24 @@ function Admin() {
             <div className="headerRightColaborador">
             <ul>
                 <li data-title="Entrada" onClick={changePagesAdministrador1}>
-                    <img src={colaboradoresIcon} alt="Colaborador logo" />
+                    <OverlayTrigger placement="bottom" overlay={tooltipColaborador}>
+                        <img src={colaboradoresIcon} alt="Colaborador logo" />
+                    </OverlayTrigger>
                 </li>
                 <li data-title="Saída" onClick={changePagesAdministrador2}>
-                    <img src={boxIcon} alt="Caixas logo" />
+                    <OverlayTrigger placement="bottom" overlay={tooltipCaixas}>
+                        <img src={boxIcon} alt="Caixas logo" />
+                    </OverlayTrigger>
                 </li>
                 <li data-title="Histórico" onClick={changePagesAdministrador3}>
-                    <img src={clockIcon} alt="Exit logo" />
+                    <OverlayTrigger placement="bottom" overlay={tooltipHistorico}>
+                        <img src={clockIcon} alt="Exit logo" />
+                    </OverlayTrigger>
                 </li>
                 <li data-title="Sair">
-                    <Link to="/login"><img src={exitIcon} alt="Exit logo" /></Link>
+                    <OverlayTrigger placement="bottom" overlay={tooltipSair}>
+                        <button onClick={deslog} className='deslogButton'><img src={exitIcon} alt="Sair logo" /></button>
+                    </OverlayTrigger>
                 </li>
             </ul>
             </div>

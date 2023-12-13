@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import "./style.css";
 import LogoBlue from "../../../assets/logoBlue.svg";
 import { Link } from "react-router-dom";
+import Toast from 'react-bootstrap/Toast';
+import { useNavigate } from "react-router-dom";
 
 function RedefinirSenha() {
     const [isPasswordVisible1, setIsPasswordVisible1] = useState(false);
@@ -28,9 +30,23 @@ function RedefinirSenha() {
         setPasswordNewAgain(e.target.value);
         setPasswordsMatch(passwordNew === e.target.value);
     };
+    const [show, setShow] = useState(false);
+    const navigate = useNavigate();
+    const passwordRightGoLoginPage = () => {
+        if (showErrorMessage === false && passwordsMatch === true) {
+            setShow(true);
+            setTimeout(() => {
+              navigate("/login");
+            }, 6000);
+          }
+          
+    }
     return (
         <>
             <div className="bodyContainerMudarSenha">
+                <Toast onClose={() => setShow(false)} show={show} delay={6000} autohide>
+                    <Toast.Body>Senha alterada com sucesso !<br/>Você será redirecionado para a tela inicial.</Toast.Body>
+                </Toast>
                 <div className="mudarSenhaCenter">
                     <div className="mudarSenhaCard">
                         <div className="mudarSenhaCardHeader">
@@ -71,7 +87,7 @@ function RedefinirSenha() {
                         </div>
                         <div className="mudarSenhaCardBottom">
                             <Link to="/login"><button>Cancelar</button></Link>
-                            <Link to="/login"><button>Proximo</button></Link>
+                            <button onClick={passwordRightGoLoginPage}>Proximo</button>
                         </div>
                     </div>
                 </div>

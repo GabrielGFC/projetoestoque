@@ -128,10 +128,14 @@
     display: flex;
     flex-direction: column;
   }
-  .popupContent form button{
-    margin: 50px auto 10px;
+  .buttonsEditColaborador{
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      margin: 50px auto 10px;
+  }
+  .buttonsEditColaborador button{
     width: 150px;
-    background-color: #003B50;
     color: white;
     font-size: 20px;
     border: none;
@@ -141,6 +145,12 @@
     font-weight: 700;
     letter-spacing: 0.5px;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  }
+  .buttonsEditColaborador button:nth-child(1){
+    background-color: #F20000;
+  }
+  .buttonsEditColaborador button:nth-child(2){
+    background-color: #009521;
   }
   .popupContent form input{
     background-color: #E6E6E6;
