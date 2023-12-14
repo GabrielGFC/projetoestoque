@@ -3,6 +3,7 @@ import "./style.css";
 import clockIcon from "../../../assets/clock.svg";
 
 function AdministradorHistorico() {
+    //declaracao
     const dataRecivedFromAlunoHistorico = [
         {
             matricula: '234', nome: "Lucas Fernandes", periodo: "10", box: "181", hora: "10:58", data: "12/04/23", status: "Validado", colaborador: "Lucas Reis", movimentacao: "Entrada"
@@ -14,57 +15,61 @@ function AdministradorHistorico() {
             matricula: '345', nome: "Roberto Chaves", periodo: "2", box: "111", hora: "07:39", data: "12/03/23", status: "Validado", colaborador: "Lucas Reis", movimentacao: "Entrada"
         }
     ];
-    const [searchCategory, setSearchCategory] = useState(''); // Estado para armazenar a categoria selecionada
-    const [searchTerm, setSearchTerm] = useState(''); // Estado para armazenar o termo de pesquisa digitado
-    const [resultadosPesquisa, setResultadosPesquisa] = useState([]); // Estado para armazenar os resultados da pesquisa
+    const [searchCategory, setSearchCategory] = useState('');
+    const [searchTerm, setSearchTerm] = useState('');
+    const [resultadosPesquisa, setResultadosPesquisa] = useState([]);
 
+    //funcoes
     const handleSearchTermChange = (e) => {
         setSearchTerm(e.target.value);
     };
-    // Função para atualizar a categoria de pesquisa selecionada
+
     const handleSearchCategoryChange = (e) => {
         setSearchCategory(e.target.value);
     };
-    
-            // Realizar a pesquisa com base na categoria e no valor digitado
-            useEffect(() => {
-                const resultadosFiltrados = dataRecivedFromAlunoHistorico.filter(aluno => {
-                // Realizar a comparação com base na categoria selecionada e no valor digitado
-                if (searchCategory === 'Selecionar categoria' || searchTerm === '') {
-                    setResultadosPesquisa(dataRecivedFromAlunoHistorico); // Mostrar todos os dados se nenhuma searchCategory for selecionada ou se o campo de pesquisa estiver vazio
-                } else if(searchCategory === 'Nome') {
-                    return aluno.nome.toLowerCase().includes(searchTerm.toLowerCase());
-                } else if (searchCategory === 'Matrícula') {
-                    return aluno.matricula.includes(searchTerm);
-                } else if (searchCategory === 'Período') {
-                    return aluno.periodo.includes(searchTerm);
-                } else if (searchCategory === 'Box') {
-                    return aluno.box.includes(searchTerm);
-                } else if (searchCategory === 'Hora') {
-                    return aluno.hora.includes(searchTerm);
-                } else if (searchCategory === 'Data') {
-                    return aluno.data.includes(searchTerm);
-                } else if (searchCategory === 'Status') {
-                    return aluno.status.toLowerCase().includes(searchTerm.toLowerCase());
-                } else if (searchCategory === 'Colaborador') {
-                    return aluno.colaborador.toLowerCase().includes(searchTerm.toLowerCase());
-                } else if (searchCategory === 'Entrada/Saída') {
-                    return aluno.movimentacao.toLowerCase().includes(searchTerm.toLowerCase());
-                }
-                return true;
-            });
-            const sortedResultados = resultadosFiltrados.sort((a, b) => { //mostrar em ordem cronológica
+
+    useEffect(() => {
+        const resultadosFiltrados = dataRecivedFromAlunoHistorico.filter(aluno => {
+            if (searchCategory === 'Selecionar categoria' || searchTerm === '') {
+                setResultadosPesquisa(dataRecivedFromAlunoHistorico);
+            } else if (searchCategory === 'Nome') {
+                return aluno.nome.toLowerCase().includes(searchTerm.toLowerCase());
+            } else if (searchCategory === 'Matrícula') {
+                return aluno.matricula.includes(searchTerm);
+            } else if (searchCategory === 'Período') {
+                return aluno.periodo.includes(searchTerm);
+            } else if (searchCategory === 'Box') {
+                return aluno.box.includes(searchTerm);
+            } else if (searchCategory === 'Hora') {
+                return aluno.hora.includes(searchTerm);
+            } else if (searchCategory === 'Data') {
+                return aluno.data.includes(searchTerm);
+            } else if (searchCategory === 'Status') {
+                return aluno.status.toLowerCase().includes(searchTerm.toLowerCase());
+            } else if (searchCategory === 'Colaborador') {
+                return aluno.colaborador.toLowerCase().includes(searchTerm.toLowerCase());
+            } else if (searchCategory === 'Entrada/Saída') {
+                return aluno.movimentacao.toLowerCase().includes(searchTerm.toLowerCase());
+            }
+            return true;
+        });
+        let sortedResultados;
+        if (searchCategory === 'Selecionar categoria') {
+            sortedResultados = resultadosFiltrados.sort((a, b) => {
                 const dateA = new Date(`${a.data} ${a.hora}`);
                 const dateB = new Date(`${b.data} ${b.hora}`);
                 return dateA - dateB;
             });
-    
-            setResultadosPesquisa(sortedResultados);
-        }, [searchCategory, searchTerm]);
-        
+        } else {
+            sortedResultados = resultadosFiltrados;
+        }
+
+        setResultadosPesquisa(sortedResultados);
+    }, [searchCategory, searchTerm]);
+
     useEffect(() => {
-        setResultadosPesquisa(dataRecivedFromAlunoHistorico); // Exibir todos os dados inicialmente
-    }, []); // Executar apenas uma vez, após a montagem do componente
+        setResultadosPesquisa(dataRecivedFromAlunoHistorico);
+    }, []);
 
     return (
         <>

@@ -26,6 +26,7 @@
     padding: 15px 20px;
     border-radius: 10px;
     margin-bottom: 20px;
+    overflow-y: scroll;
 }
 .headerTop{
     background-color: #003B50;
@@ -34,7 +35,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 10px 20px;
-    height: 8vh;
+    height: 60px;
 }
 .headerLeft{
     display: flex;

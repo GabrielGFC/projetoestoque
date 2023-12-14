@@ -5,15 +5,18 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 function SolicitarDados() {
-    const matriculasColaboradores = [2345];
+    //declaracao
+    var matriculasColaboradores = [ //banco matriculas colaboradores
+        2345
+    ];
     const [matricula, setMatricula] = useState('');
     const [loginError, setLoginError] = useState(false);
     const navigate = useNavigate();
 
-
+    //funcoes
     const handleMatriculaChange = (e) => {
         setMatricula(e.target.value);
-        setLoginError(false); // Reset loginError when matricula changes
+        setLoginError(false);
     };
 
     const handleNextButtonClick = () => {

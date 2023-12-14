@@ -3,7 +3,7 @@ import "./styleAluno.css";
 import odontoLogo from "../alunoEntrada/../../assets/logo.svg";
 import exitIcon from "../alunoEntrada/../../assets/exit.svg";
 import addIcon from "../alunoEntrada/../../assets/add.svg";
-import { Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import Toast from 'react-bootstrap/Toast';
 import { useNavigate } from "react-router-dom";
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
@@ -12,21 +12,42 @@ import Tooltip from 'react-bootstrap/Tooltip';
 
 
 function AlunoEntrada() {
-  // MANAGE INFO
+  //declaracao
   const [tableData, setTableData] = useState([]);
   const [valueFamily, setValueFamily] = useState("0");
   const [quantSelectorDisabled, changeStatus] = useState(true);
   const [valueQuant, setValueQuant] = useState("0");
   const [buttonsList, setSecondButtonStyle] = useState({ display: "none" });
   const [alertAddStyle, setAlertStyle] = useState({ display: "none" });
-  
-  const addMovement = () => { // ... lógica para adicionar um novo movimento ...
+  var familyOptions = [ //banco familias
+    {
+      familia: "Dentística",
+      quantMax: 20,
+      quantMin: 10
+    },
+    {
+      familia: "Cirúrgica",
+      quantMax: 15,
+      quantMin: 10
+    },
+    {
+      familia: "Moldeira de prótese",
+      quantMax: 9,
+      quantMin: 1
+    }
+  ];
+  const navigate = useNavigate();
+  const [show, setShow] = useState({ display: "none" });
+  const [matricula, setMatricula] = useState('');
+
+  //funcoes
+  const addMovement = () => {
     const newMovement = {
       family: valueFamily,
       quantity: parseInt(valueQuant, 10),
-    }; 
+    };
     const existingIndex = tableData.findIndex((item) => item.family === valueFamily);
-  
+
     if (existingIndex !== -1) {
       const updatedTableData = [...tableData];
       updatedTableData[existingIndex].quantity = parseInt(valueQuant, 10);
@@ -38,38 +59,49 @@ function AlunoEntrada() {
     setValueQuant("0");
     changeStatus(true);
   };
-  const detectEntryFamily = (e) => {  // ... lógica para detectar a família selecionada ...
+
+  const detectEntryFamily = (e) => {
     const selectedFamily = e.target.value;
     setValueFamily(selectedFamily);
     if (selectedFamily !== "0") {
       changeSelectorState();
     }
   };
-  const changeSelectorState = () => { // ... lógica para habilitar o seletor de quantidade ...
+
+  const changeSelectorState = () => {
     changeStatus(false);
   };
 
-  const detectEntryQuant = (e) => { // ... lógica para detectar o valor selecionado no seletor de quantidade ...
+  const detectEntryQuant = (e) => {
     const selectedQuant = e.target.value;
     setValueQuant(selectedQuant);
   };
 
-  const renderOptionsQuant = () => { // ... lógica para gerar as opções de quantidade ...
-    return (
-      <>
+  const renderOptionsQuant = () => {
+    if (valueFamily !== "0") {
+      const selectedFamily = familyOptions.find((option) => option.familia === valueFamily);
+      return (
+        <>
+          <option value="0" disabled>
+            Selecionar
+          </option>
+          {[...Array(selectedFamily.quantMax - selectedFamily.quantMin + 1).keys()].map((value) => (
+            <option key={value + selectedFamily.quantMin} value={value + selectedFamily.quantMin}>
+              {value + selectedFamily.quantMin}
+            </option>
+          ))}
+        </>
+      );
+    } else {
+      return (
         <option value="0" disabled>
           Selecionar
         </option>
-        {[...Array(20).keys()].map((value) => (
-          <option key={value + 1} value={value + 1}>
-            {value + 1}
-          </option>
-        ))}
-      </>
-    );
+      );
+    }
   };
-  
-  const tableReportContent = () => { // ... lógica para gerar o conteúdo da tabela com as caixas ...
+
+  const tableReportContent = () => {
     return tableData.map((item, index) => (
       <tbody key={index}>
         <tr>
@@ -78,8 +110,8 @@ function AlunoEntrada() {
       </tbody>
     ));
   };
-  
-  const buttonItemAdded = () => { // ... lógica para o botão "Adicionar" ...
+
+  const buttonItemAdded = () => {
     if (valueQuant !== "0") {
       setSecondButtonStyle({ display: "flex" });
       addMovement();
@@ -89,8 +121,8 @@ function AlunoEntrada() {
       setAlertStyle({ display: "flex" });
     }
   };
-  
-  const buttonItemRemoved = () => { // ... lógica para o botão "Cancelar" ...
+
+  const buttonItemRemoved = () => {
     setTableData([]);
     setSecondButtonStyle({ display: "none" });
     setValueFamily("0");
@@ -98,9 +130,9 @@ function AlunoEntrada() {
     changeStatus(true);
     setAlertStyle({ display: "none" });
   };
-  const navigate = useNavigate();
-  const sendRequestoToColaboratorButton = () => { // ... lógica para enviar a solicitação para o colaborador ...
-    const finalDataMovement = [
+
+  const sendRequestoToColaboratorButton = () => {
+    var finalDataMovement = [ //banco pedido feito pelo aluno
       {
         "matricula": matricula,
         "caixas": tableData
@@ -108,31 +140,27 @@ function AlunoEntrada() {
     ];
     console.log(finalDataMovement);
     buttonItemRemoved()
-    setShow(true)
+    setShow({ display: "block" })
     setTimeout(() => {
       navigate("/login");
       localStorage.removeItem('usuario');
     }, 6000);
   }
 
-
-  const [matricula, setMatricula] = useState('');
-
-  useEffect(() => { // ... lógica para recuperar a matrícula do armazenamento local ...
+  useEffect(() => {
     const storedMatricula = localStorage.getItem('matricula');
     if (storedMatricula) {
       setMatricula(storedMatricula);
       console.log(storedMatricula)
     }
   }, []);
-  
-  const handleLogout = () => { // ... lógica para fazer logout e limpar a matrícula do armazenamento local ...
+
+  const handleLogout = () => {
     localStorage.removeItem('matricula');
     localStorage.removeItem('usuario');
     console.log(localStorage)
     console.log(finalDataMovement);
   };
-  const [show, setShow] = useState(false);
 
   //Tooltip Id's
   const tooltipSair = (
@@ -140,9 +168,9 @@ function AlunoEntrada() {
       <strong>Sair</strong>
     </Tooltip>
   );
+
   return (
     <>
-     {/* ... estrutura do cabeçalho ... */}
       <header className="headerTop">
         <div className="headerLeft">
           <img src={odontoLogo} className="odontoLogo" alt="Odonto logo" />
@@ -150,20 +178,22 @@ function AlunoEntrada() {
         </div>
         <div className="headerRightAluno">
           <ul>
-              <li data-title="Sair">
-                <OverlayTrigger placement="bottom" overlay={tooltipSair}>
-                  <Link to="/login" onClick={handleLogout}><img src={exitIcon} alt="Exit logo" /></Link>
-                </OverlayTrigger>
-              </li>
+            <li data-title="Sair">
+              <OverlayTrigger placement="bottom" overlay={tooltipSair}>
+                <Link to="/login" onClick={handleLogout}><img src={exitIcon} alt="Exit logo" /></Link>
+              </OverlayTrigger>
+            </li>
           </ul>
         </div>
       </header>
-      <div className="body">
-          <Toast onClose={() => setShow(false)} show={show} delay={6000} autohide>
-            <Toast.Body>Pedido enviado com sucesso !<br/>Você será desconectado.</Toast.Body>
+      <div className="body" >
+        <div className="containerToast" style={show}>
+          <Toast onClose={() => setShow({ display: "none" })} delay={10000} autohide>
+            <Toast.Body>Pedido enviado com sucesso !<br />Você será desconectado.</Toast.Body>
           </Toast>
+        </div>
         <div className="contentTop">
-          {/* ... estrutura do conteúdo principal ... */}
+          {/*conteúdo principal*/}
           <img src={addIcon} className="addIcon" alt="Add icon" />
           <h2>
             Registrar <span>entrada</span> de caixas
@@ -179,19 +209,11 @@ function AlunoEntrada() {
                   <option value="0" disabled>
                     Selecionar
                   </option>
-                  <option value="Cirúrgica">Cirúrgica</option>
-                  <option value="Dentística">Dentística</option>
-                  <option value="Moldeira de prótese">Moldeira de prótese</option>
-                  <option value="Família 4">Familia 04</option>
-                  <option value="Família 5">Família 05</option>
-                  <option value="Família 6">Família 06</option>
-                  <option value="Família 7">Família 07</option>
-                  <option value="Família 8">Família 08</option>
-                  <option value="Família 9">Família 9</option>
-                  <option value="Família 10">Família 10</option>
-                  <option value="Família 11">Família 11</option>
-                  <option value="Família 12">Família 12</option>
-                  <option value="Família 13">Família 13</option>
+                  {familyOptions.map((option) => (
+                    <option key={option.familia} value={option.familia}>
+                      {option.familia}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div className="quantCard">
@@ -214,7 +236,7 @@ function AlunoEntrada() {
           </div>
           <div className="contentBottom" style={buttonsList}>
             <button onClick={buttonItemRemoved}>Cancelar</button>
-            <button onClick={sendRequestoToColaboratorButton}  className="buttonSendToColaborator">Confirmar</button>
+            <button onClick={sendRequestoToColaboratorButton} className="buttonSendToColaborator">Confirmar</button>
           </div>
         </div>
       </div>

@@ -1,8 +1,8 @@
-/*TABELA DE PEDIDO DE ENTRADA*/
 .entryRequestTable{
     height: 450px;
     display: flex;
     flex-direction: column;
+    overflow-y: scroll;
 }
 .entryRequestTable tbody tr{
     width: 100%;

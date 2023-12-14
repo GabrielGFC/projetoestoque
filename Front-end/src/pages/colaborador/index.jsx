@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import ColaboradorEntrada from './entrada';
 import ColaboradorSaida from './saida';
 import ColaboradorHistorico from './historico';
-import { Link } from "react-router-dom";
 import "./style.css";
 import removeIcon from "../../assets/remove.svg";
 import clockIcon from "../../assets/clock.svg";
@@ -15,10 +14,18 @@ import { useNavigate } from "react-router-dom";
 
 
 function Colaborador() {
+  //declaracao
   const [activePage, setActivePage] = useState('entrada');
-
+  const navigate = useNavigate();
+  //funcoes
   const changePage = (page) => {
     setActivePage(page);
+  };
+  const deslog = () => {
+    localStorage.removeItem('matricula');
+    localStorage.removeItem('usuario');
+    navigate("/login");
+
   };
 
   //Tooltip Id's
@@ -33,23 +40,16 @@ function Colaborador() {
     </Tooltip>
   );
   const tooltipSaida = (
-    <Tooltip id="tooltip"> 
+    <Tooltip id="tooltip">
       <strong>Saída</strong>
     </Tooltip>
   );
   const tooltipEntrada = (
-    <Tooltip id="tooltip"> 
+    <Tooltip id="tooltip">
       <strong>Entrada</strong>
     </Tooltip>
   );
-  //sair 
-  const navigate = useNavigate();
-  const deslog = () => { // ... lógica para fazer logout e limpar a matrícula do armazenamento local ...
-    localStorage.removeItem('matricula');
-    localStorage.removeItem('usuario');
-    navigate("/login");
-    
-  };
+
   return (
     <>
       <header className="headerTop">
@@ -92,7 +92,7 @@ function Colaborador() {
         <div className="colaboradorHistoricoDiv" style={{ display: activePage === 'historico' ? 'flex' : 'none' }}>
           <ColaboradorHistorico />
         </div>
-      
+
       </div>
     </>
   )
