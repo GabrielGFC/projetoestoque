@@ -3,10 +3,9 @@ import "./style.css";
 import removeIcon from "../../../assets/remove.svg";
 
 function ColaboradorSaida() {
-  //declaracao
   var dataRecivedFromAlunoSaida = [ //banco dos estoques de cada aluno
     {
-      matricula: '1234', nome: "Lucas Fernandes", periodo: "10", box: "349", caixas: [
+      matricula: '1234', nome: "Lucas Fernandes", periodo: "10", box: "349", caixas: [ 
         {
           "family": "Família 07",
           "quantity": "20"
@@ -25,8 +24,8 @@ function ColaboradorSaida() {
   const [matricula, setMatricula] = useState('');
   const [alunoInfo, setAlunoInfo] = useState(null);
 
-  //funcoes
   const handleSearch = () => {
+    // Buscar o aluno correspondente ao número de matrícula digitado
     const alunoEncontrado = dataRecivedFromAlunoSaida.find(aluno => aluno.matricula === matricula);
     setAlunoInfo(alunoEncontrado);
   };

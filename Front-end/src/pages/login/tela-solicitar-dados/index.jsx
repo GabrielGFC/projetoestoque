@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 function SolicitarDados() {
-    //declaracao
     var matriculasColaboradores = [ //banco matriculas colaboradores
         2345
     ];
@@ -13,7 +12,7 @@ function SolicitarDados() {
     const [loginError, setLoginError] = useState(false);
     const navigate = useNavigate();
 
-    //funcoes
+
     const handleMatriculaChange = (e) => {
         setMatricula(e.target.value);
         setLoginError(false);

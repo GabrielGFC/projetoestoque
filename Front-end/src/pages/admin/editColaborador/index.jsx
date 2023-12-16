@@ -3,9 +3,11 @@ import './style.css';
 import colaboradoresIcon from '../../../assets/colaboradores.svg';
 
 function AdministradorEditColaborador() {
-    //declaracao
+    // Estado para controlar a exibição do pop-up de edição
     const [showPopup, setShowPopup] = useState(false);
+    // Estado para controlar a exibição do pop-up de criação
     const [showCreatePopup, setShowCreatePopup] = useState(false);
+    // Estado para armazenar os dados do colaborador selecionado para edição
     const [colaboradorDataEdit, setColaboradorDataEdit] = useState({
         matricula: '',
         nome: '',
@@ -18,35 +20,31 @@ function AdministradorEditColaborador() {
         email: '',
         senha: ''
     });
+    // Estado para controlar a visibilidade da senha
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+    // Estado para armazenar a categoria de pesquisa selecionada
     const [searchCategory, setSearchCategory] = useState('');
+    // Estado para armazenar o termo de pesquisa digitado
     const [searchTerm, setSearchTerm] = useState('');
-    const dataRecivedColaboradores = [
-        {
-            matricula: '1234', nome: "Lucas Reis", email: "lucas_reis@email.com", senha: "abc90"
-        },
-        {
-            matricula: '2345', nome: "Talita Lopes", email: "talita_lopes@email.com", senha: "uni90"
-        }
-    ];
-    const [showInputsAlertEdit, setShowInputsAlertEdit] = useState(false);
-    const [showInputsAlertNew, setShowInputsAlertNew] = useState(false);
 
-    //funcoes
+    // Função para atualizar a categoria de pesquisa selecionada
     const handleSearchCategoryChange = (e) => {
         setSearchCategory(e.target.value);
     };
 
+    // Função para atualizar o termo de pesquisa digitado
     const handleSearchTermChange = (e) => {
         setSearchTerm(e.target.value);
     };
 
+    // Função para abrir o pop-up de criação
     const openCreatePopup = () => {
         setColaboradorDataAdd({ matricula: '', nome: '', email: '', senha: '' });
         setShowCreatePopup(true);
         setShowPopup(false);
     };
 
+    // Função para fechar os pop-ups
     const closePopup = () => {
         setShowPopup(false);
         setShowCreatePopup(false);
@@ -60,16 +58,29 @@ function AdministradorEditColaborador() {
         setShowInputsAlertEdit(false);
     };
 
+    // Função para abrir o pop-up de edição com os dados do colaborador selecionado
     const openEditPopup = (originalData) => {
         setColaboradorDataEdit({ ...originalData });
         setShowPopup(true);
         setShowCreatePopup(false);
     };
 
+    // Função para alternar a visibilidade da senha
     const togglePasswordVisibility = () => {
         setIsPasswordVisible(!isPasswordVisible);
     };
 
+    // Dados dos colaboradores recebidos
+    const dataRecivedColaboradores = [
+        {
+            matricula: '1234', nome: "Lucas Reis", email: "lucas_reis@email.com", senha: "abc90"
+        },
+        {
+            matricula: '2345', nome: "Talita Lopes", email: "talita_lopes@email.com", senha: "uni90"
+        }
+    ];
+
+    // Filtrar colaboradores com base na categoria e no termo de pesquisa
     const filteredColaboradores = dataRecivedColaboradores.filter((colaborador) => {
         if (searchCategory === 'Nome') {
             return colaborador.nome.toLowerCase().includes(searchTerm.toLowerCase());
@@ -80,35 +91,37 @@ function AdministradorEditColaborador() {
         }
         return true;
     });
-
+    const [showInputsAlertEdit, setShowInputsAlertEdit] = useState(false);
     const editColaboradorHandle = (e) => {
         e.preventDefault();
         const matriculaValue = colaboradorDataEdit.matricula;
         const nomeValue = colaboradorDataEdit.nome;
         const emailValue = colaboradorDataEdit.email;
         const senhaValue = colaboradorDataEdit.senha;
-
+    
         if (matriculaValue && nomeValue && emailValue && senhaValue) {
-            //enviar/salvar os dados
+            // lógica para enviar/salvar os dados
+            // ...
         } else {
             setShowInputsAlertEdit(true);
         }
     };
-
+    const [showInputsAlertNew, setShowInputsAlertNew] = useState(false);
     const addColaboradorHandle = (e) => {
         e.preventDefault();
         const matriculaValue = colaboradorDataAdd.matricula;
         const nomeValue = colaboradorDataAdd.nome;
         const emailValue = colaboradorDataAdd.email;
         const senhaValue = colaboradorDataAdd.senha;
-
+    
         if (matriculaValue && nomeValue && emailValue && senhaValue) {
-            // enviar/salvar os dados
+            // lógica para enviar/salvar os dados
+            // ...
         } else {
             setShowInputsAlertNew(true);
         }
     };
-
+    
 
     return (
         <>
@@ -181,7 +194,7 @@ function AdministradorEditColaborador() {
 
                         <label htmlFor="senha">Senha:</label>
                         <div className="passwordInputContainer">
-                            <input type="password" id="senhaEdit" name="senhaCodeEdit" value={colaboradorDataEdit.senha} onChange={(e) => setColaboradorDataEdit({ ...colaboradorDataEdit, senha: e.target.value })} />
+                        <input type="password" id="senhaEdit" name="senhaCodeEdit" value={colaboradorDataEdit.senha} onChange={(e) => setColaboradorDataEdit({ ...colaboradorDataEdit, senha: e.target.value })} />
 
                             <span
                                 className={isPasswordVisible ? "lnr lnr-eye" : "lnr lnr-eye-slash"}
@@ -204,13 +217,13 @@ function AdministradorEditColaborador() {
                     <h3>Adicionar Colaborador</h3>
                     <form onSubmit={addColaboradorHandle}>
                         <label htmlFor="matriculaAdd">Matrícula:</label>
-                        <input type="number" id="matriculaAdd" name="matriculaCodeAdd" value={colaboradorDataAdd.matricula} onChange={(e) => setColaboradorDataAdd({ ...colaboradorDataAdd, matricula: e.target.value })} />
+                        <input type="number" id="matriculaAdd" name="matriculaCodeAdd" value={colaboradorDataAdd.matricula} onChange={(e) => setColaboradorDataAdd({ ...colaboradorDataAdd, matricula: e.target.value })}/>
 
                         <label htmlFor="nomeAdd">Nome:</label>
-                        <input type="text" id="nomeAdd" name="nomeCodeAdd" value={colaboradorDataAdd.nome} onChange={(e) => setColaboradorDataAdd({ ...colaboradorDataAdd, nome: e.target.value })} />
+                        <input type="text" id="nomeAdd" name="nomeCodeAdd" value={colaboradorDataAdd.nome} onChange={(e) => setColaboradorDataAdd({ ...colaboradorDataAdd, nome: e.target.value })}/>
 
                         <label htmlFor="emailAdd">E-mail:</label>
-                        <input type="email" id="emailAdd" name="emailCodeAdd" value={colaboradorDataAdd.email} onChange={(e) => setColaboradorDataAdd({ ...colaboradorDataAdd, email: e.target.value })} />
+                        <input type="email" id="emailAdd" name="emailCodeAdd" value={colaboradorDataAdd.email} onChange={(e) => setColaboradorDataAdd({ ...colaboradorDataAdd, email: e.target.value })}/>
 
                         <label htmlFor="senha">Senha:</label>
                         <div className="passwordInputContainerAddNewColaborador">

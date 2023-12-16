@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 function SolicitarCodigo() {
-    //declaracao
     const navigate = useNavigate();
     var sentCodes = [ //banco codigos gerados para colaborador
         {
@@ -15,7 +14,7 @@ function SolicitarCodigo() {
     ];
     const [enteredCode, setEnteredCode] = useState('');
     const [matriculaError, setMatriculaError] = useState(false);
-    //funcoes
+
     const handleCodeChange = (e) => {
         setEnteredCode(e.target.value);
         setMatriculaError(false);

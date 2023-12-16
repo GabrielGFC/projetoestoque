@@ -6,7 +6,7 @@ import Admin from '../pages/admin/index';
 
 const PrivateRouteAluno = () => {
     var authAluno = null;
-    const storedUsuarioType = localStorage.getItem('usuario');
+    const storedUsuarioType = localStorage.getItem('usuario', "aluno");
     if (storedUsuarioType == 'aluno') {
         authAluno = true;
     }
@@ -15,7 +15,7 @@ const PrivateRouteAluno = () => {
 
 const PrivateRouteColaborador = () => {
     var authColaborador = null;
-    const storedUsuarioType = localStorage.getItem('usuario');
+    const storedUsuarioType = localStorage.getItem('usuario', "colaborador");
     if (storedUsuarioType == 'colaborador') {
         authColaborador = true;
     }
@@ -30,7 +30,4 @@ const PrivateRouteAdmin = () => {
     }
     return authAdmin ? <Admin /> : <Navigate to="/login" />;
 }
-window.addEventListener('beforeunload', function() {
-    localStorage.removeItem('usuario');
-  });
 export{ PrivateRouteAluno, PrivateRouteColaborador, PrivateRouteAdmin };

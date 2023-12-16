@@ -6,16 +6,13 @@ import Toast from 'react-bootstrap/Toast';
 import { useNavigate } from "react-router-dom";
 
 function RedefinirSenha() {
-    //declaracao
     const [isPasswordVisible1, setIsPasswordVisible1] = useState(false);
     const [isPasswordVisible2, setIsPasswordVisible2] = useState(false);
     const [passwordNew, setPasswordNew] = useState('');
     const [passwordNewAgain, setPasswordNewAgain] = useState('');
     const [showErrorMessage, setShowErrorMessage] = useState(false);
     const [passwordsMatch, setPasswordsMatch] = useState(true);
-    const [show, setShow] = useState({ display: "none" });
-    const navigate = useNavigate();
-    //funcoes
+
     const togglePasswordVisibility1 = () => {
         setIsPasswordVisible1((prev) => !prev);
     };
@@ -33,22 +30,23 @@ function RedefinirSenha() {
         setPasswordNewAgain(e.target.value);
         setPasswordsMatch(passwordNew === e.target.value);
     };
-
+    const [show, setShow] = useState({display: "none"});
+    const navigate = useNavigate();
     const passwordRightGoLoginPage = () => {
         if (showErrorMessage === false && passwordsMatch === true) {
-            setShow({ display: "block" });
+            setShow({display: "block"});
             setTimeout(() => {
                 navigate("/login");
             }, 6000);
-        }
-
+          }
+          
     }
     return (
         <>
             <div className="bodyContainerMudarSenha">
                 <div className="containerToast" style={show}>
-                    <Toast onClose={() => setShow({ display: "none" })} delay={10000} autohide>
-                        <Toast.Body>Senha alterada com sucesso !<br />Você será redirecionado para a tela inicial.</Toast.Body>
+                    <Toast onClose={() => setShow({display: "none"})} delay={100} autohide>
+                        <Toast.Body>Senha alterada com sucesso !<br/>Você será redirecionado para a tela inicial.</Toast.Body>
                     </Toast>
                 </div>
                 <div className="mudarSenhaCenter">

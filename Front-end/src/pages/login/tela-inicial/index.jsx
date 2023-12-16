@@ -5,14 +5,13 @@ import LogoBlue from "../../../assets/logoBlue.svg";
 import { Link, useNavigate } from 'react-router-dom';
 
 function Login() {
-  //declaracao
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [matricula, setMatricula] = useState('');
   const [senha, setSenha] = useState('');
   const [loginError, setLoginError] = useState(false);
   const navigateTo = useNavigate();
 
-  //funcoes
+  //visibilidade senha
   const togglePasswordVisibility = () => {
     setIsPasswordVisible((prev) => !prev);
   };
@@ -24,36 +23,35 @@ function Login() {
   const handleSenhaChange = (e) => {
     setSenha(e.target.value);
   };
-
+  //autenticação
   const validarLogin = () => {
     var usuariosAluno = [
-      { matricula: '1234', senha: 'use1' }, //banco alunos
+      { matricula: '1234567', senha: 'use1' }, //banco alunos
     ]
     var usuariosColaborador = [
-      { matricula: '2345', senha: 'use2' } //banco colaboradores
+        {matricula: '2345678', senha: 'use2'} //banco colaboradores
     ];
     var usuariosAdmin = [
-      { matricula: '3456', senha: 'use3' } //banco admins
-    ];
+      {matricula: '3456789', senha: 'use3'} //banco admins
+  ];
     const usuarioEncontradoAluno = usuariosAluno.find(user => user.matricula === matricula && user.senha === senha);
     const usuarioEncontradoColaborador = usuariosColaborador.find(user => user.matricula === matricula && user.senha === senha);
     const usuarioEncontradoAdmin = usuariosAdmin.find(user => user.matricula === matricula && user.senha === senha);
 
     if (usuarioEncontradoAluno) {
-      localStorage.setItem('matricula', matricula);
-      localStorage.setItem('usuario', "aluno");
-      navigateTo('/aluno');
-      console.log(matricula);
-    } else if (usuarioEncontradoColaborador) {
-      navigateTo('/colaborador');
-      localStorage.setItem('usuario', "colaborador");
-    } else if (usuarioEncontradoAdmin) {
-      localStorage.setItem('usuario', "admin");
-      navigateTo('/admin');
-    } else {
-      setLoginError(true);
-    }
-  };
+        localStorage.setItem('matricula', matricula);
+        localStorage.setItem('usuario', "aluno");
+        navigateTo('/aluno')
+      } else if (usuarioEncontradoColaborador) {
+        navigateTo('/colaborador');
+        localStorage.setItem('usuario', "colaborador");
+      } else if (usuarioEncontradoAdmin) {
+        localStorage.setItem('usuario', "admin");
+        navigateTo('/admin');
+      }else {
+        setLoginError(true);
+      }
+    };
   return (
     <>
       <div className="bodyContainer">
@@ -70,7 +68,7 @@ function Login() {
               <h2>Login</h2>
               <div className="loginCardCenterMatricula">
                 <h3>Usuário</h3>
-                <input value={matricula} type="number" onChange={handleMatriculaChange} placeholder="Digite sua matrícula" />
+                <input value={matricula} type="number"  onChange={handleMatriculaChange} placeholder="Digite sua matrícula"/>
               </div>
               <div className="loginCardCenterSenha">
                 <h3>Senha</h3>

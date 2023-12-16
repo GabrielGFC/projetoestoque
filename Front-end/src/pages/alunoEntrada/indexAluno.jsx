@@ -12,35 +12,16 @@ import Tooltip from 'react-bootstrap/Tooltip';
 
 
 function AlunoEntrada() {
-  //declaracao
   const [tableData, setTableData] = useState([]);
   const [valueFamily, setValueFamily] = useState("0");
   const [quantSelectorDisabled, changeStatus] = useState(true);
   const [valueQuant, setValueQuant] = useState("0");
   const [buttonsList, setSecondButtonStyle] = useState({ display: "none" });
   const [alertAddStyle, setAlertStyle] = useState({ display: "none" });
-  var familyOptions = [ //banco familias
-    {
-      familia: "Dentística",
-      quantMax: 20,
-      quantMin: 10
-    },
-    {
-      familia: "Cirúrgica",
-      quantMax: 15,
-      quantMin: 10
-    },
-    {
-      familia: "Moldeira de prótese",
-      quantMax: 9,
-      quantMin: 1
-    }
-  ];
-  const navigate = useNavigate();
-  const [show, setShow] = useState({ display: "none" });
   const [matricula, setMatricula] = useState('');
+  const navigate = useNavigate();
 
-  //funcoes
+  //adicionar um novo movimento
   const addMovement = () => {
     const newMovement = {
       family: valueFamily,
@@ -60,6 +41,7 @@ function AlunoEntrada() {
     changeStatus(true);
   };
 
+  //detectar a família selecionada
   const detectEntryFamily = (e) => {
     const selectedFamily = e.target.value;
     setValueFamily(selectedFamily);
@@ -67,16 +49,44 @@ function AlunoEntrada() {
       changeSelectorState();
     }
   };
-
+  //gerar opcoes de familias
+  var familyOptions = [ //banco familias
+    {
+      familia: "Dentística",
+      quantMax: 20,
+      quantMin: 10
+    },
+    {
+      familia: "Cirúrgica",
+      quantMax: 15,
+      quantMin: 10
+    },
+    {
+      familia: "Moldeira de prótese",
+      quantMax: 9,
+      quantMin: 1
+    }
+  ]
+  var alunoDados = {
+    "matricula": 1234567,
+    "nome": "Lucas Fernandes",
+    "periodo": 10,
+    "box": 181,
+  }
+  //habilitar o seletor de quantidade
   const changeSelectorState = () => {
     changeStatus(false);
   };
 
+
+  //detectar o valor selecionado no seletor de quantidade
   const detectEntryQuant = (e) => {
     const selectedQuant = e.target.value;
     setValueQuant(selectedQuant);
   };
 
+
+  //gerar as opções de quantidade
   const renderOptionsQuant = () => {
     if (valueFamily !== "0") {
       const selectedFamily = familyOptions.find((option) => option.familia === valueFamily);
@@ -101,6 +111,7 @@ function AlunoEntrada() {
     }
   };
 
+  //gerar o conteúdo da tabela com as caixas
   const tableReportContent = () => {
     return tableData.map((item, index) => (
       <tbody key={index}>
@@ -111,6 +122,7 @@ function AlunoEntrada() {
     ));
   };
 
+  //botão "Adicionar"
   const buttonItemAdded = () => {
     if (valueQuant !== "0") {
       setSecondButtonStyle({ display: "flex" });
@@ -122,6 +134,7 @@ function AlunoEntrada() {
     }
   };
 
+  //botão "Cancelar"
   const buttonItemRemoved = () => {
     setTableData([]);
     setSecondButtonStyle({ display: "none" });
@@ -131,36 +144,51 @@ function AlunoEntrada() {
     setAlertStyle({ display: "none" });
   };
 
-  const sendRequestoToColaboratorButton = () => {
-    var finalDataMovement = [ //banco pedido feito pelo aluno
-      {
-        "matricula": matricula,
-        "caixas": tableData
-      }
-    ];
-    console.log(finalDataMovement);
-    buttonItemRemoved()
-    setShow({ display: "block" })
+  //enviar a solicitação para o colaborador
+  const sendRequestToColaboratorButton = () => {
+    const finalDataMovement = { "aluno": alunoDados, "caixas": tableData };
+    const storedDataEntryRequest = JSON.parse(localStorage.getItem('entryRequest')) || [];
+    const formattedData = {
+      aluno: finalDataMovement.aluno,
+      caixas: finalDataMovement.caixas
+    };
+    storedDataEntryRequest.push(formattedData);
+    localStorage.setItem('entryRequest', JSON.stringify(storedDataEntryRequest));
+
+    buttonItemRemoved();
+    setShow({ display: "block" });
     setTimeout(() => {
       navigate("/login");
-      localStorage.removeItem('usuario');
+      const storedUsuario = JSON.parse(localStorage.getItem('usuario'));
+      if (storedUsuario) {
+        delete storedUsuario.aluno;
+        localStorage.setItem('usuario', JSON.stringify(storedUsuario));
+      }
     }, 6000);
-  }
+  };
 
+
+  //recuperar a matrícula do armazenamento local
   useEffect(() => {
     const storedMatricula = localStorage.getItem('matricula');
     if (storedMatricula) {
       setMatricula(storedMatricula);
-      console.log(storedMatricula)
     }
   }, []);
 
+
+  //logout e limpar a matrícula do armazenamento local
   const handleLogout = () => {
     localStorage.removeItem('matricula');
-    localStorage.removeItem('usuario');
+    const storedUsuario = JSON.parse(localStorage.getItem('usuario'));
+    if (storedUsuario) {
+      delete storedUsuario.aluno;
+      localStorage.setItem('usuario', JSON.stringify(storedUsuario));
+    }
     console.log(localStorage)
     console.log(finalDataMovement);
   };
+  const [show, setShow] = useState({ display: "none" });
 
   //Tooltip Id's
   const tooltipSair = (
@@ -168,7 +196,6 @@ function AlunoEntrada() {
       <strong>Sair</strong>
     </Tooltip>
   );
-
   return (
     <>
       <header className="headerTop">
@@ -188,7 +215,7 @@ function AlunoEntrada() {
       </header>
       <div className="body" >
         <div className="containerToast" style={show}>
-          <Toast onClose={() => setShow({ display: "none" })} delay={10000} autohide>
+          <Toast onClose={() => setShow({ display: "none" })} delay={100} autohide>
             <Toast.Body>Pedido enviado com sucesso !<br />Você será desconectado.</Toast.Body>
           </Toast>
         </div>
@@ -236,7 +263,7 @@ function AlunoEntrada() {
           </div>
           <div className="contentBottom" style={buttonsList}>
             <button onClick={buttonItemRemoved}>Cancelar</button>
-            <button onClick={sendRequestoToColaboratorButton} className="buttonSendToColaborator">Confirmar</button>
+            <button onClick={sendRequestToColaboratorButton} className="buttonSendToColaborator">Confirmar</button>
           </div>
         </div>
       </div>

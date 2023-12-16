@@ -3,10 +3,14 @@ import './style.css';
 import boxIcon from '../../../assets/box.svg';
 
 function AdministradorEditCaixas() {
-    //declaracao
+    // Estado para controlar a exibição do pop-up de edição
     const [showPopup, setShowPopup] = useState(false);
+    // Estado para controlar a exibição do pop-up de criação
     const [showCreatePopup, setShowCreatePopup] = useState(false);
+
+
     const [originalData, setOriginalData] = useState({});
+    // Estado para armazenar os dados do item selecionado para edição
     const [familyDataAdd, setfamilyDataAdd] = useState({
         familia: '',
         maxPecas: '',
@@ -17,18 +21,11 @@ function AdministradorEditCaixas() {
         maxPecas: '',
         minPecas: ''
     });
+    
+    // Estado para controlar o termo de pesquisa digitado
     const [searchTerm, setSearchTerm] = useState('');
-    const dataRecivedCaixas = [
-        { familia: 'Cirúrgica', maxPecas: 20, minPecas: 2 },
-        { familia: 'Dentística', maxPecas: 17, minPecas: 10 },
-        { familia: 'Moldeira de prótese', maxPecas: 10, minPecas: 1 }
-    ];
-    const [showInputsAlertEdit, setShowInputsAlertEdit] = useState(false);
-    const [showQuantAlertEdit, setShowQuantAlertEdit] = useState(false);
-    const [showInputsAlertNew, setShowInputsAlertNew] = useState(false);
-    const [showQuantAlertNew, setShowQuantAlertNew] = useState(false);
 
-    //funcoes
+    // Função para abrir o pop-up de criação
     const openCreatePopup = () => {
         setfamilyDataAdd({ familia: '', maxPecas: '', minPecas: '' });
         setShowCreatePopup(true);
@@ -36,11 +33,12 @@ function AdministradorEditCaixas() {
     };
 
     const openEditPopup = (originalData) => {
-        setFamilyDataEdit({ ...originalData });
+        setFamilyDataEdit({ ...originalData }); // Armazenar os dados originais diretamente no estado do pop-up de edição
         setShowPopup(true);
         setShowCreatePopup(false);
     };
-
+    
+    // Ajuste a função closePopup
     const closePopup = () => {
         setShowPopup(false);
         setShowCreatePopup(false);
@@ -48,16 +46,29 @@ function AdministradorEditCaixas() {
             familia: '',
             maxPecas: '',
             minPecas: ''
-        });
+        }); // Limpar os dados ao fechar o pop-up de edição
         setShowInputsAlertNew(false);
         setShowQuantAlertNew(false);
         setShowInputsAlertEdit(false);
         setShowQuantAlertEdit(false);
     };
 
+    // Dados das caixas recebidos
+    const dataRecivedCaixas = [
+        { familia: 'Cirúrgica', maxPecas: 20, minPecas: 2 },
+        { familia: 'Dentística', maxPecas: 17, minPecas: 10 },
+        { familia: 'Moldeira de prótese', maxPecas: 10, minPecas: 1 }
+    ];
+
+    // Filtrar caixas com base no termo de pesquisa
     const filteredCaixas = dataRecivedCaixas.filter((caixa) => {
         return caixa.familia.toLowerCase().includes(searchTerm.toLowerCase());
     });
+
+
+    //alerta para preencher todos os campos pop up edit
+    const [showInputsAlertEdit, setShowInputsAlertEdit] = useState(false);
+    const [showQuantAlertEdit, setShowQuantAlertEdit] = useState(false);
     const editFamilyHandle = (e) => {
         e.preventDefault();
         const familiaValue = e.target.familiaCodeEdit.value;
@@ -65,29 +76,33 @@ function AdministradorEditCaixas() {
         const minPecasValue = parseInt(e.target.minPecasCodeEdit.value);
 
         if (familiaValue && maxPecasValue && minPecasValue) {
-            if (maxPecasValue > minPecasValue) {
+            if ( maxPecasValue > minPecasValue){
                 setShowQuantAlertEdit(false);
                 setShowInputsAlertEdit(false);
-            } else if (maxPecasValue < minPecasValue) {
+            } else if(maxPecasValue < minPecasValue) {
                 setShowQuantAlertEdit(true);
             }
         } else {
             setShowInputsAlertEdit(true);
             if (maxPecasValue < minPecasValue) {
                 setShowQuantAlertEdit(true);
-            } else if (maxPecasValue > minPecasValue) {
+            } else if ( maxPecasValue > minPecasValue){
                 setShowQuantAlertEdit(false);
             }
         }
     };
 
+
     useEffect(() => {
+        // Store original data when edit popup is opened
         if (showPopup) {
             setOriginalData({ ...familyDataEdit });
             console.log({ ...familyDataEdit })
         }
     }, [showPopup, familyDataEdit]);
-
+    //alerta para preencher todos os campos pop up criar
+    const [showInputsAlertNew, setShowInputsAlertNew] = useState(false);
+    const [showQuantAlertNew, setShowQuantAlertNew] = useState(false);
     const addFamilyHandle = (e) => {
         e.preventDefault();
         const familiaValue = e.target.familiaCodeAdd.value;
@@ -159,51 +174,51 @@ function AdministradorEditCaixas() {
             </div>
             <div className="popupContainer" style={{ display: showPopup ? 'block' : 'none' }}>
                 <div className="popupContent">
-                    <span className="closePopup" onClick={closePopup}>
-                        &times;
-                    </span>
-                    <h3>Editar Família</h3>
-                    <form onSubmit={editFamilyHandle}>
-                        <label htmlFor="familiaEdit">Família:</label>
-                        <input type="text" id="familiaEdit" name="familiaCodeEdit" value={familyDataEdit.familia} onChange={(e) => setFamilyDataEdit({ ...familyDataEdit, familia: e.target.value })} />
+                <span className="closePopup" onClick={closePopup}>
+                    &times;
+                </span>
+                <h3>Editar Família</h3>
+                <form onSubmit={editFamilyHandle}>
+                    <label htmlFor="familiaEdit">Família:</label>
+                    <input type="text" id="familiaEdit" name="familiaCodeEdit" value={familyDataEdit.familia} onChange={(e) => setFamilyDataEdit({ ...familyDataEdit, familia: e.target.value })} />
 
-                        <label htmlFor="maxPecasEdit">Máximo de peças:</label>
-                        <input type="number" id="maxPecasEdit" name="maxPecasCodeEdit" value={familyDataEdit.maxPecas} onChange={(e) => setFamilyDataEdit({ ...familyDataEdit, maxPecas: e.target.value })} />
+                    <label htmlFor="maxPecasEdit">Máximo de peças:</label>
+                    <input type="number" id="maxPecasEdit" name="maxPecasCodeEdit" value={familyDataEdit.maxPecas} onChange={(e) => setFamilyDataEdit({ ...familyDataEdit, maxPecas: e.target.value })} />
 
-                        <label htmlFor="minPecasEdit">Mínimo de peças:</label>
-                        <input type="number" id="minPecasEdit" name="minPecasCodeEdit" value={familyDataEdit.minPecas} onChange={(e) => setFamilyDataEdit({ ...familyDataEdit, minPecas: e.target.value })} />
+                    <label htmlFor="minPecasEdit">Mínimo de peças:</label>
+                    <input type="number" id="minPecasEdit" name="minPecasCodeEdit" value={familyDataEdit.minPecas} onChange={(e) => setFamilyDataEdit({ ...familyDataEdit, minPecas: e.target.value })} />
 
-                        {showInputsAlertEdit && <p className='alertNewSenha'>Todos os campos devem estar preenchidos.</p>}
-                        {showQuantAlertEdit && <p className='alertNewSenha'>A quantidade máxima deve ser maior que a quantidade mínima !</p>}
+                    {showInputsAlertEdit && <p className='alertNewSenha'>Todos os campos devem estar preenchidos.</p>}
+                    {showQuantAlertEdit && <p className='alertNewSenha'>A quantidade máxima deve ser maior que a quantidade mínima !</p>}
 
-                        <div className="buttonsEditColaborador">
-                            <button type="submit">Deletar</button>
-                            <button type="submit">Salvar</button>
-                        </div>
-                    </form>
+                    <div className="buttonsEditColaborador">
+                        <button type="submit">Deletar</button>
+                        <button type="submit">Salvar</button>
+                    </div>
+                </form>
                 </div>
             </div>
             <div className="popupContainer" style={{ display: showCreatePopup ? 'block' : 'none' }}>
-                <div className="popupContent">
-                    <span className="closePopup" onClick={closePopup}>
-                        &times;
-                    </span>
-                    <h3>Adicionar Família</h3>
-                    <form onSubmit={addFamilyHandle}>
-                        <label htmlFor="familiaAdd">Família:</label>
-                        <input type="text" id="familiaAdd" name="familiaCodeAdd" value={familyDataAdd.familia} onChange={(e) => setfamilyDataAdd({ ...familyDataAdd, familia: e.target.value })} />
-                        <label htmlFor="maxPecasAdd">Máximo de peças:</label>
-                        <input type="number" id="maxPecasAdd" name="maxPecasCodeAdd" value={familyDataAdd.maxPecas} onChange={(e) => setfamilyDataAdd({ ...familyDataAdd, maxPecas: e.target.value })} />
-                        <label htmlFor="minPecasAdd">Mínimo de peças:</label>
-                        <input type="number" id="minPecasAdd" name="minPecasCodeAdd" value={familyDataAdd.minPecas} onChange={(e) => setfamilyDataAdd({ ...familyDataAdd, minPecas: e.target.value })} />
-                        {showInputsAlertNew && <p className='alertNewSenha'>Todos os campos devem estar preenchidos.</p>}
-                        {showQuantAlertNew && <p className='alertNewSenha'>A quantidade máxima deve ser maior que a quantidade mínima !</p>}
-                        <button type="submit" className='buttonsEditFamilias'>Salvar</button>
-                    </form>
-                </div>
-            </div>
-        </>
-    );
+        <div className="popupContent">
+          <span className="closePopup" onClick={closePopup}>
+            &times;
+          </span>
+          <h3>Adicionar Família</h3>
+          <form onSubmit={addFamilyHandle}>
+            <label htmlFor="familiaAdd">Família:</label>
+            <input type="text" id="familiaAdd" name="familiaCodeAdd" value={familyDataAdd.familia} onChange={(e) => setfamilyDataAdd({ ...familyDataAdd, familia: e.target.value })} />
+            <label htmlFor="maxPecasAdd">Máximo de peças:</label>
+            <input type="number" id="maxPecasAdd" name="maxPecasCodeAdd" value={familyDataAdd.maxPecas} onChange={(e) => setfamilyDataAdd({ ...familyDataAdd, maxPecas: e.target.value })} />
+            <label htmlFor="minPecasAdd">Mínimo de peças:</label>
+            <input type="number" id="minPecasAdd" name="minPecasCodeAdd" value={familyDataAdd.minPecas} onChange={(e) => setfamilyDataAdd({ ...familyDataAdd, minPecas: e.target.value })} />
+            {showInputsAlertNew && <p className='alertNewSenha'>Todos os campos devem estar preenchidos.</p>}
+            {showQuantAlertNew && <p className='alertNewSenha'>A quantidade máxima deve ser maior que a quantidade mínima !</p>}
+            <button type="submit" className='buttonsEditFamilias'>Salvar</button>
+          </form>
+        </div>
+      </div>
+    </>
+  );
 }
 
 export default AdministradorEditCaixas;
