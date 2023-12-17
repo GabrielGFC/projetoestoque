@@ -17,7 +17,24 @@ exports.get = async (req, res) => {
     res.status(500).json({ error: 'Erro ao buscar estoque.' });
     }
 };
-//get by ID
+//get by Matricula
+exports.getByMatricula = async (req, res) => {
+  try {
+    const { matricula } = req.params;
+    const estoque = await Estoque.findOne({
+      include: [
+        { model: Caixa,
+          attributes: ['idCaixa', 'nome', 'quantidade', 'matricula'],
+          where: { matricula: matricula } },
+        { model: User, attributes: ["nome", "periodo", "box"] },
+      ]
+    });
+    res.json(estoque);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Erro ao buscar estoque." });
+  }
+};
 exports.getById = async (req, res) => {
   try {
     const { idEstoque } = req.params; // Obtém o ID da solicitação

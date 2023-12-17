@@ -33,7 +33,7 @@ function Login() {
       { matricula: '1234567', senha: 'colaborador' } //banco colaboradores
     ];
     var usuariosAdmin = [
-      { matricula: 3456789, senha: 'use3' } //banco admins
+      { matricula: '1010101', senha: 'admin' } //banco admins
     ];
     const usuarioEncontradoAluno = usuariosAluno.find(user => user.matricula === matricula && user.senha === senha);
     const usuarioEncontradoColaborador = usuariosColaborador.find(user => user.matricula === matricula && user.senha === senha);
@@ -51,6 +51,7 @@ function Login() {
           alert("Erro")
         });
       navigateTo('/aluno')
+
     } else if (usuarioEncontradoColaborador) {
       navigateTo('/colaborador');
       localStorage.setItem('usuario', "colaborador");

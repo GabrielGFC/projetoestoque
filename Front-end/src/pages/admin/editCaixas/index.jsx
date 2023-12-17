@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import './style.css';
 import boxIcon from '../../../assets/box.svg';
-import { api } from '../../../service';
 
 function AdministradorEditCaixas() {
+    // Estado para controlar a exibição do pop-up de edição
     const [showPopup, setShowPopup] = useState(false);
+    // Estado para controlar a exibição do pop-up de criação
     const [showCreatePopup, setShowCreatePopup] = useState(false);
+
+
     const [originalData, setOriginalData] = useState({});
-    const [caixas, setCaixas] = useState([]);
+    // Estado para armazenar os dados do item selecionado para edição
     const [familyDataAdd, setfamilyDataAdd] = useState({
         familia: '',
         maxPecas: '',
@@ -18,8 +21,11 @@ function AdministradorEditCaixas() {
         maxPecas: '',
         minPecas: ''
     });
-    const [searchTerm, setSearchTerm] = useState('');
     
+    // Estado para controlar o termo de pesquisa digitado
+    const [searchTerm, setSearchTerm] = useState('');
+
+    // Função para abrir o pop-up de criação
     const openCreatePopup = () => {
         setfamilyDataAdd({ familia: '', maxPecas: '', minPecas: '' });
         setShowCreatePopup(true);
@@ -46,22 +52,14 @@ function AdministradorEditCaixas() {
         setShowInputsAlertEdit(false);
         setShowQuantAlertEdit(false);
     };
-    
-    useEffect(() => {
-        // Fazer uma solicitação para a API para buscar os dados das caixas
-        api.get('/caixas')
-          .then(response => {
-            // Definir os dados das caixas obtidos da API
-            setCaixas(response.data);
-            console.log('Dados das caixas obtidos:', response.data); // Adicionando um log para depuração
-          })
-          .catch(error => {
-            console.error('Ocorreu um erro ao buscar os dados das caixas da API:', error);
-          });
-      }, []);
+
+    // Dados das caixas recebidos
+    const dataRecivedCaixas = [
+        { familia: 'Cirúrgica', maxPecas: 20, minPecas: 2 },
+    ];
 
     // Filtrar caixas com base no termo de pesquisa
-    const filteredCaixas = caixas.filter((caixa) => {
+    const filteredCaixas = dataRecivedCaixas.filter((caixa) => {
         return caixa.familia.toLowerCase().includes(searchTerm.toLowerCase());
     });
 

@@ -65,7 +65,7 @@ const registrosIniciais = async () => {
         }
 
         if (!caixa) {
-            await Caixa.create({ idItem: 1, nome: 'Cirúrgica', matricula: 1234567, quantidade: 15});
+            await Caixa.create({ idItem: 1, nome: 'Cirúrgica', matricula: 7654321, quantidade: 15});
         }
 
         if (!pedido) {
