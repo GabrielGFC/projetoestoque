@@ -3,6 +3,7 @@ import "./style.css";
 import DentistLogo from "../../../assets/dentist.svg";
 import LogoBlue from "../../../assets/logoBlue.svg";
 import { Link, useNavigate } from 'react-router-dom';
+import { api } from '../../../service/index';
 
 function Login() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -24,34 +25,58 @@ function Login() {
     setSenha(e.target.value);
   };
   //autenticação
-  const validarLogin = () => {
+  const validarLogin = async () => {
     var usuariosAluno = [
-      { matricula: '1234567', senha: 'use1' }, //banco alunos
+      { matricula: '7654321', senha: 'aluno' }, //banco alunos
     ]
     var usuariosColaborador = [
-        {matricula: '2345678', senha: 'use2'} //banco colaboradores
+      { matricula: '1234567', senha: 'colaborador' } //banco colaboradores
     ];
     var usuariosAdmin = [
-      {matricula: '3456789', senha: 'use3'} //banco admins
-  ];
+      { matricula: 3456789, senha: 'use3' } //banco admins
+    ];
     const usuarioEncontradoAluno = usuariosAluno.find(user => user.matricula === matricula && user.senha === senha);
     const usuarioEncontradoColaborador = usuariosColaborador.find(user => user.matricula === matricula && user.senha === senha);
     const usuarioEncontradoAdmin = usuariosAdmin.find(user => user.matricula === matricula && user.senha === senha);
 
     if (usuarioEncontradoAluno) {
-        localStorage.setItem('matricula', matricula);
-        localStorage.setItem('usuario', "aluno");
-        navigateTo('/aluno')
-      } else if (usuarioEncontradoColaborador) {
-        navigateTo('/colaborador');
-        localStorage.setItem('usuario', "colaborador");
-      } else if (usuarioEncontradoAdmin) {
-        localStorage.setItem('usuario', "admin");
-        navigateTo('/admin');
-      }else {
-        setLoginError(true);
-      }
-    };
+      localStorage.setItem('matricula', matricula);
+      localStorage.setItem('usuario', "aluno");
+      await api.post('/auth', { matricula: '7654321', senha: 'aluno' })
+        .then(response => {
+          console.log(response)
+        })
+        .catch(error => {
+          console.log(error)
+          alert("Erro")
+        });
+      navigateTo('/aluno')
+    } else if (usuarioEncontradoColaborador) {
+      navigateTo('/colaborador');
+      localStorage.setItem('usuario', "colaborador");
+      await api.post('/auth', usuarioEncontradoColaborador)
+        .then(response => {
+          console.log(response)
+        })
+        .catch(error => {
+          console.log(error)
+          alert("Erro")
+        });
+    } else if (usuarioEncontradoAdmin) {
+      localStorage.setItem('usuario', "admin");
+      navigateTo('/admin');
+      await api.post('/auth', { usuarioEncontradoAdmin })
+        .then(response => {
+          console.log(response)
+        })
+        .catch(error => {
+          console.log(error)
+          alert("Erro")
+        });
+    } else {
+      setLoginError(true);
+    }
+  };
   return (
     <>
       <div className="bodyContainer">
@@ -68,12 +93,12 @@ function Login() {
               <h2>Login</h2>
               <div className="loginCardCenterMatricula">
                 <h3>Usuário</h3>
-                <input value={matricula} type="number"  onChange={handleMatriculaChange} placeholder="Digite sua matrícula"/>
+                <input value={matricula} type="number" onChange={handleMatriculaChange} placeholder="Digite sua matrícula" />
               </div>
               <div className="loginCardCenterSenha">
                 <h3>Senha</h3>
                 <div className='divPassword'>
-                  <input maxLength="4" id="password" type={isPasswordVisible ? 'text' : 'password'} placeholder="Digite sua senha" value={senha} onChange={handleSenhaChange} />
+                  <input maxLength="1000" id="password" type={isPasswordVisible ? 'text' : 'password'} placeholder="Digite sua senha" value={senha} onChange={handleSenhaChange} />
                   <span className="lnr lnr-eye" onClick={togglePasswordVisibility} />
                 </div>
               </div>

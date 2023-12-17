@@ -8,25 +8,30 @@ import Toast from 'react-bootstrap/Toast';
 import { useNavigate } from "react-router-dom";
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
-
-
+import { api } from '../../service';
 
 function AlunoEntrada() {
+  const [show, setShow] = useState({ display: "none" });
   const [tableData, setTableData] = useState([]);
   const [valueFamily, setValueFamily] = useState("0");
   const [quantSelectorDisabled, changeStatus] = useState(true);
   const [valueQuant, setValueQuant] = useState("0");
   const [buttonsList, setSecondButtonStyle] = useState({ display: "none" });
   const [alertAddStyle, setAlertStyle] = useState({ display: "none" });
-  const [matricula, setMatricula] = useState('');
   const navigate = useNavigate();
+  const [loadedFamilyOptions, setLoadedFamilyOptions] = useState([]);
+  var alunoDados = {
+    "nome": "Lucas Fernandes",
+    "periodo": 10,
+    "box": 181,
+  }
+  var alunoMatricula = 7654321;
 
-  //adicionar um novo movimento
+  const finalDataMovement = { aprovacao: 'false', idCaixa: 1,  matricula: alunoMatricula };
+  const newMovement = { familia: valueFamily, quantidade: parseInt(valueQuant, 10) };
+
+  // Adicionar um novo movimento
   const addMovement = () => {
-    const newMovement = {
-      family: valueFamily,
-      quantity: parseInt(valueQuant, 10),
-    };
     const existingIndex = tableData.findIndex((item) => item.family === valueFamily);
 
     if (existingIndex !== -1) {
@@ -41,7 +46,7 @@ function AlunoEntrada() {
     changeStatus(true);
   };
 
-  //detectar a família selecionada
+  // Detectar a família selecionada
   const detectEntryFamily = (e) => {
     const selectedFamily = e.target.value;
     setValueFamily(selectedFamily);
@@ -49,55 +54,45 @@ function AlunoEntrada() {
       changeSelectorState();
     }
   };
-  //gerar opcoes de familias
-  var familyOptions = [ //banco familias
-    {
-      familia: "Dentística",
-      quantMax: 20,
-      quantMin: 10
-    },
-    {
-      familia: "Cirúrgica",
-      quantMax: 15,
-      quantMin: 10
-    },
-    {
-      familia: "Moldeira de prótese",
-      quantMax: 9,
-      quantMin: 1
-    }
-  ]
-  var alunoDados = {
-    "matricula": 1234567,
-    "nome": "Lucas Fernandes",
-    "periodo": 10,
-    "box": 181,
-  }
-  //habilitar o seletor de quantidade
+
+  // Habilitar o seletor de quantidade
   const changeSelectorState = () => {
     changeStatus(false);
   };
 
-
-  //detectar o valor selecionado no seletor de quantidade
+  // Detectar o valor selecionado no seletor de quantidade
   const detectEntryQuant = (e) => {
     const selectedQuant = e.target.value;
     setValueQuant(selectedQuant);
   };
 
-
-  //gerar as opções de quantidade
+  async function getFamilias() {
+    await api.get('/familia')
+        .then(response => {
+          setLoadedFamilyOptions(response.data);
+        })
+        .catch(error => {
+          console.log(error);
+          alert("Erro");
+        })
+  }
+  // Gerar as opções de quantidade
   const renderOptionsQuant = () => {
+    useEffect(() => {
+      // Buscar familyOptions da API
+      getFamilias();
+    }, []);
+
     if (valueFamily !== "0") {
-      const selectedFamily = familyOptions.find((option) => option.familia === valueFamily);
+      const selectedFamily = loadedFamilyOptions.find((option) => option.nome === valueFamily);
       return (
         <>
           <option value="0" disabled>
             Selecionar
           </option>
-          {[...Array(selectedFamily.quantMax - selectedFamily.quantMin + 1).keys()].map((value) => (
-            <option key={value + selectedFamily.quantMin} value={value + selectedFamily.quantMin}>
-              {value + selectedFamily.quantMin}
+          {[...Array (Number(selectedFamily.quantMax) - Number(selectedFamily.quantMin) + 1).keys()].map((value) => (
+            <option key={value + parseInt(selectedFamily.quantMin)} value={value + parseInt(selectedFamily.quantMin)}>
+              {value + parseInt(selectedFamily.quantMin)}
             </option>
           ))}
         </>
@@ -111,18 +106,19 @@ function AlunoEntrada() {
     }
   };
 
-  //gerar o conteúdo da tabela com as caixas
+
+  // Gerar o conteúdo da tabela com as caixas
   const tableReportContent = () => {
     return tableData.map((item, index) => (
       <tbody key={index}>
         <tr>
-          <td><p><span>Família:</span> {item.family}</p><p><span>Quantidade de itens:</span> {item.quantity}</p></td>
+          <td><p><span>Família:</span> {item.familia}</p><p><span>Quantidade de itens:</span> {item.quantidade}</p></td>
         </tr>
       </tbody>
     ));
   };
 
-  //botão "Adicionar"
+  // Botão "Adicionar"
   const buttonItemAdded = () => {
     if (valueQuant !== "0") {
       setSecondButtonStyle({ display: "flex" });
@@ -134,7 +130,7 @@ function AlunoEntrada() {
     }
   };
 
-  //botão "Cancelar"
+  // Botão "Cancelar"
   const buttonItemRemoved = () => {
     setTableData([]);
     setSecondButtonStyle({ display: "none" });
@@ -144,58 +140,52 @@ function AlunoEntrada() {
     setAlertStyle({ display: "none" });
   };
 
-  //enviar a solicitação para o colaborador
-  const sendRequestToColaboratorButton = () => {
-    const finalDataMovement = { "aluno": alunoDados, "caixas": tableData };
-    const storedDataEntryRequest = JSON.parse(localStorage.getItem('entryRequest')) || [];
-    const formattedData = {
-      aluno: finalDataMovement.aluno,
-      caixas: finalDataMovement.caixas
-    };
-    storedDataEntryRequest.push(formattedData);
-    localStorage.setItem('entryRequest', JSON.stringify(storedDataEntryRequest));
-
-    buttonItemRemoved();
-    setShow({ display: "block" });
-    setTimeout(() => {
-      navigate("/login");
-      const storedUsuario = JSON.parse(localStorage.getItem('usuario'));
-      if (storedUsuario) {
-        delete storedUsuario.aluno;
-        localStorage.setItem('usuario', JSON.stringify(storedUsuario));
-      }
-    }, 6000);
+  // Enviar a solicitação para o colaborador usando a API
+  const sendRequestToColaboratorButton = async () => {
+    const finalDataMovement = { aprovacao: false, idCaixa: 1,  matricula: alunoMatricula };
+    await api.post('/pedido', finalDataMovement)
+      .then(response => {
+        console.log(response)
+        buttonItemRemoved();
+        setShow({ display: "block" });
+        setTimeout(() => {
+          navigate("/login");
+        }, 6000);
+      })
+      .catch(error => {
+        console.log(error)
+        alert("Erro")
+      });
   };
 
+  // Recuperar a matrícula usando a API
+  // useEffect(() => {
+  //     // Lógica para recuperar a matrícula usando a API
+  //     api.get('/matricula')
+  //         .then(response => {
+  //             setMatricula(response.data.matricula);
+  //         })
+  //         .catch(error => {
+  //             console.log(error)
+  //             alert("Erro")
+  //         });
+  // }, []);
 
-  //recuperar a matrícula do armazenamento local
-  useEffect(() => {
-    const storedMatricula = localStorage.getItem('matricula');
-    if (storedMatricula) {
-      setMatricula(storedMatricula);
-    }
-  }, []);
-
-
-  //logout e limpar a matrícula do armazenamento local
+  // Logout e limpar a matrícula usando a API
   const handleLogout = () => {
-    localStorage.removeItem('matricula');
     const storedUsuario = JSON.parse(localStorage.getItem('usuario'));
     if (storedUsuario) {
       delete storedUsuario.aluno;
       localStorage.setItem('usuario', JSON.stringify(storedUsuario));
     }
-    console.log(localStorage)
-    console.log(finalDataMovement);
   };
-  const [show, setShow] = useState({ display: "none" });
 
-  //Tooltip Id's
   const tooltipSair = (
     <Tooltip id="tooltip">
       <strong>Sair</strong>
     </Tooltip>
   );
+
   return (
     <>
       <header className="headerTop">
@@ -236,9 +226,9 @@ function AlunoEntrada() {
                   <option value="0" disabled>
                     Selecionar
                   </option>
-                  {familyOptions.map((option) => (
-                    <option key={option.familia} value={option.familia}>
-                      {option.familia}
+                  {loadedFamilyOptions.map((option) => (
+                    <option key={option.nome} value={option.nome}>
+                      {option.nome}
                     </option>
                   ))}
                 </select>
