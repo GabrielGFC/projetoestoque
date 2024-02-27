@@ -1,6 +1,7 @@
-Entendi. Aqui está o README.md formatado em Markdown com a adição do bloco de código bash para cada seção:
+Obrigado pela informação. Aqui está o README atualizado com seu endereço de e-mail:
 
-```markdown
+---
+
 # Sistema de Controle de Estoque
 
 Este repositório contém o backend do Sistema de Controle de Estoque para uma aplicação de gerenciamento de inventário.
@@ -10,7 +11,7 @@ Este repositório contém o backend do Sistema de Controle de Estoque para uma a
 Para começar a trabalhar com este projeto, clone o repositório usando o seguinte comando:
 
 ```bash
-$ git clone https://github.com/GabrielGFC/projetoestoque.git
+git clone https://github.com/GabrielGFC/projetoestoque.git
 ```
 
 ## Configuração do Ambiente de Desenvolvimento
@@ -25,13 +26,13 @@ Antes de executar o projeto, certifique-se de ter os seguintes requisitos instal
 Navegue até o diretório do backend:
 
 ```bash
-$ cd backend/
+cd backend/
 ```
 
 Instale as dependências do projeto com o seguinte comando:
 
 ```bash
-$ npm install
+npm install
 ```
 
 ## Executando o Servidor
@@ -39,13 +40,13 @@ $ npm install
 Para executar o servidor em ambiente de desenvolvimento, utilize o seguinte comando:
 
 ```bash
-$ npm run dev
+npm run dev
 ```
 
 Para executar o servidor em ambiente de produção, utilize o seguinte comando:
 
 ```bash
-$ npm run start
+npm run start
 ```
 
 ## Acessando a Documentação do Swagger
@@ -65,6 +66,6 @@ Lá você encontrará todos os endpoints, parâmetros e outras informações rel
 - GitHub: [GabrielGFC](https://github.com/GabrielGFC)
 
 Certifique-se de configurar o ambiente conforme necessário antes de executar o sistema. Se encontrar problemas durante a configuração ou execução, entre em contato com o autor ou consulte a documentação fornecida.
-```
 
-Copie e cole este texto no arquivo README.md do seu repositório no GitHub. Ele será exibido corretamente formatado na página do seu repositório.
+--- 
+
