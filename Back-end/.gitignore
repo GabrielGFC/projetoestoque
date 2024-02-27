@@ -1,7 +1,0 @@
-package-lock.json
-node_modules/
-database.db
-#teste
-.env/
-```
-.vscode
