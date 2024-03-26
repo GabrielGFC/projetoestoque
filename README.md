@@ -1,4 +1,3 @@
-Obrigado pela informação. Aqui está o README atualizado com seu endereço de e-mail:
 
 ---
 
