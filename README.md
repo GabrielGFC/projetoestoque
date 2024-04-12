@@ -10,7 +10,7 @@ Este repositório contém o backend do Sistema de Controle de Estoque para uma a
 Para começar a trabalhar com este projeto, clone o repositório usando o seguinte comando:
 
 ```bash
-git clone https://github.com/GabrielGFC/projetoestoque.git
+git clone https://gitlab.com/ftt-odonto1/odonto-desenvolvimento.git
 ```
 
 ## Configuração do Ambiente de Desenvolvimento
